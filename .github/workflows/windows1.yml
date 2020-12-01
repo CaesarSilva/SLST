@@ -1,0 +1,130 @@
+name: main
+on: [workflow_dispatch]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+          #{ msystem: MINGW64, arch: x86_64 },
+          { msystem: MINGW32, arch: i686   }
+        ]
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          path: temp
+          fetch-depth: 0
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: git base-devel mingw-w64-${{ matrix.arch }}-toolchain
+          update: true
+          
+#      - name: Move Checkout
+#        run: |
+#          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
+  
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: C:\wx
+          key:  ${{ runner.os }}-wxmonolith1
+#       
+#      - name: testing cmake msys
+#        shell: msys2 {0}   
+#        run: |
+#          pacman -S mingw-w64-i686-wxmsw3.1 --noconfirm
+#          pacman -S mingw-w64-i686-cmake --noconfirm
+#          ls
+#          cd temp
+#          mkdir build
+#          cd build
+#          cmake .. -G "MSYS Makefiles"
+#          make
+          
+        
+      - name: Download and extract wx widgets
+        if: steps.cache.outputs.cache-hit != 'true'
+
+        run: |
+          cd C:\
+          mkdir wx
+          curl -L -o C:\wx.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.zip
+          Expand-Archive -LiteralPath wx.zip -DestinationPath C:\wx
+          cd C:\wx
+          mkdir mybuild
+          dir
+          cd C:\wx
+          cd lib
+      - name: compiling wxwidgets
+        if: steps.cache.outputs.cache-hit != 'true'
+        shell: msys2 {0}      
+        run: |
+          cd /C/wx/mybuild/
+          ../configure --enable-monolithic --enable-shared --enable-unicode
+          make -j2
+          make install
+          
+      - name: installing wxwidgets
+        if: steps.cache.outputs.cache-hit == 'true'
+        shell: msys2 {0}
+        run: |
+          cd /C/wx/mybuild/
+          make install
+      - name: Cmake and build project on msys2
+        shell: msys2 {0}
+        run: |
+          pacman -S mingw-w64-i686-cmake --noconfirm
+          ls
+          cd temp
+          mkdir build
+          cd build
+          cmake .. -G "MSYS Makefiles"
+          make
+          cd /C/
+          mkdir libs
+      - name: copying lib
+        run: |
+          cd temp
+          dir
+          cd build
+          dir
+          mkdir libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libgcc_s_dw2-1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libstdc++-6.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libexpat-1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/zlib1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/liblzma-5.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libwinpthread-1.dll C:\libs
+          copy C:/wx/mybuild/lib/wxmsw314u_gcc_custom.dll C:\libs
+          copy C:/wx/mybuild/lib/wxmsw314u_gl_gcc_custom.dll C:\libs
+          Xcopy /E /I C:\libs libs
+          
+#here starts conf env originally
+#      - name: conf env
+#        run: |
+#          cd temp
+#          dir
+#          mkdir build
+#          cd build
+#          set WXWIN=C:\wx
+#          cmake .. -G "MinGW Makefiles"
+#        shell: cmd   
+#      - name: build using msys
+#        shell: msys2 {0}
+#        run: |
+#          cd temp
+#          cd build
+#          make
+      - name: "Upload binaries"
+        uses: actions/upload-artifact@v2
+        with:
+          name: minimal windows
+          path: temp\build
