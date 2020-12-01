@@ -20,8 +20,8 @@ add_executable(
     ${PROJECT_NAME}
     ${SRC_FILES}
     )
-target_include_directories(helloapp PRIVATE include)
 target_include_directories(helloapp PRIVATE rapidjson)
+target_include_directories(helloapp PRIVATE include)
 target_link_libraries(
     ${PROJECT_NAME}
     ${wxWidgets_LIBRARIES}
