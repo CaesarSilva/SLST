@@ -55,14 +55,32 @@ for(int i=0 ; i<reader.GetInteger("info", "NumOfEntries", -1); i++){
     AddNotification(std::string("test"),std::string("test5"),2);
 }
 void NotificationTab::LobbySearch(){
-     httplib::Client cli("http://api.soldat.pl");
+     //httplib::Client cli("http://api.soldat.pl");
 
-    auto res = cli.Get("/v0/servers?empty=no");
-
-
+    //auto res = cli.Get("/v0/servers?empty=no");
+    wxHTTP get;
+    get.SetHeader(_T("Content-type"), _T("text/html; charset=utf-8"));
+    get.SetTimeout(10);
+    while (!get.Connect(_T("api.soldat.pl")))  // only the server, no pages here yet ...
+    wxSleep(5);
+    wxApp::IsMainLoopRunning();
+    wxInputStream *httpStream = get.GetInputStream(_T("/v0/servers?empty=no"));
+    //if (get.GetError() == wxPROTO_NOERR)
+    //{
+    wxString res;
+    wxStringOutputStream out_stream(&res);
+    httpStream->Read(out_stream);
+    //}
+    wxDELETE(httpStream);
+    get.Close();
     rapidjson::Document doc ;
-    std::string document = res->body;
+    //std::string document = res->body;
+    std::string document = std::string(res.mb_str());
+
+    std::cout << document.c_str() << std::endl;
+
     doc.Parse(document.c_str());
+    //doc.Parse(res.c_str());
     if(doc["Servers"].IsArray()){
         for(int i=0; i<doc["Servers"].Size();i++){
             //rm_test_textctrl->AppendText("\ntSTest\n");

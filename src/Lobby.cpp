@@ -119,10 +119,29 @@ nw_RequestJson("http://api.soldat.pl/v0/servers?empty=no&bots=no", 1);
 }
 
 void Lobby::OnBtRefresh_Click(wxCommandEvent&evt){
-    httplib::Client cli("http://api.soldat.pl");
+    //httplib::Client cli("http://api.soldat.pl");
 
-    auto res = cli.Get("/v0/servers?empty=no");//&bots=no
-    json_parse2action(res->body, 1);
+    //auto res = cli.Get("/v0/servers?empty=no");//&bots=no
+
+     wxHTTP get;
+    get.SetHeader(_T("Content-type"), _T("text/html; charset=utf-8"));
+    get.SetTimeout(10);
+    while (!get.Connect(_T("api.soldat.pl")))  // only the server, no pages here yet ...
+    wxSleep(5);
+    wxApp::IsMainLoopRunning();
+    wxInputStream *httpStream = get.GetInputStream(_T("/v0/servers?empty=no"));
+    //if (get.GetError() == wxPROTO_NOERR)
+    //{
+    wxString res;
+    wxStringOutputStream out_stream(&res);
+    httpStream->Read(out_stream);
+    //}
+    wxDELETE(httpStream);
+    get.Close();
+    std::string document = std::string(res.mb_str());
+    json_parse2action(document, 1);
+    //json_parse2action(res->body, 1);
+
     wxCommandEvent eventt(MY_NEW_TYPE);
     eventt.SetString("This is the data");
     wxFrame* rm_testframe = new wxFrame(this, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700));
