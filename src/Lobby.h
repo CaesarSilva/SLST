@@ -1,7 +1,6 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 //#include <string>
-#include "httplib.h"
 #include <wx/wx.h>
 #include <wx/textctrl.h>
 #include <wx/vector.h>
@@ -19,6 +18,9 @@
 //#include <boost/log/utility/setup.hpp>
 
 //#include "restc-cpp/restc-cpp.h"
+//#include "httplib.h"//TODO remove it if you don't use it
+#include "wx/sstream.h"
+#include <wx/protocol/http.h>
 #include "rapidjson/document.h" // JSON STUFF
 //#include "rapidjson/encodings.h" // maybe that will solve the error
 #include <cstring>

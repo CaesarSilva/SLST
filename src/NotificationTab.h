@@ -1,6 +1,5 @@
 #ifndef NOTIFICATIONTAB_H
 #define NOTIFICATIONTAB_H
-#include "httplib.h"
 #include <wx/wx.h>
 #include <wx/textctrl.h>
 #include <wx/taskbar.h>
@@ -9,6 +8,9 @@
 //#include <wx/vector.h>
 #include <vector>
 
+//#include "httplib.h"//TODO Remove it if you dont use it
+#include "wx/sstream.h"
+#include <wx/protocol/http.h>
 #include "rapidjson/document.h"
 #include <wx/iconloc.h>
 //#include "ini.h"//TODO REMOVE UNUSED LIBRARY
