@@ -1,6 +1,5 @@
 #ifndef CAPP_H
 #define CAPP_H
-#include "httplib.h"
 #include "wx/wx.h"
 #include "cMain.h"
 
