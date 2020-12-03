@@ -1,8 +1,8 @@
 #include "NotificationTab.h"
 
-#ifndef wxHAS_IMAGES_IN_RESOURCES
+//#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "SLST.xpm"
-#endif
+//#endif
 
 
 
