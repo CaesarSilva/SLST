@@ -1,4 +1,4 @@
-project(helloapp)
+project(SLST)
 
 cmake_minimum_required(VERSION 2.8)
 find_package(wxWidgets COMPONENTS core base REQUIRED)
