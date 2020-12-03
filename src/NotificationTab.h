@@ -5,6 +5,9 @@
 #include <wx/taskbar.h>
 #include <wx/notifmsg.h>
 #include <wx/textfile.h>
+#ifdef __WXGTK210__
+    #include <libnotify/notify.h>
+#endif // __WXGTK210__
 //#include <wx/vector.h>
 #include <vector>
 
@@ -17,7 +20,12 @@
 #include "INIReader.h"
 //#include <wx/fileconf.h>
 //wxDECLARE_EVENT(TaskBarIconEvent, wxCommandEvent);
+/*
+`pkg-config --cflags --libs glib-2.0`
+`pkg-config --cflags --libs gdk-pixbuf-2.0`
+removed linker flags
 
+*/
 class Taskbar : public wxTaskBarIcon
 {
     public:
@@ -54,11 +62,13 @@ class NotificationTab : public wxPanel
         void LobbySearch();
         void AddNotification(std::string Title, std::string Description , int type);
         void ShowNextNotification();
+        void ShowNotification(std::string Title , std::string Description);
 
     wxDECLARE_EVENT_TABLE();
     struct SvFilters{
         int MinPlayers=0;
         std::string MapList;
+
     };
 
     struct SvIniEntry{
@@ -66,6 +76,14 @@ class NotificationTab : public wxPanel
         int Port;
         int id;
         SvFilters Filters;
+        std::string Title;
+        std::string Description;
+    };
+    struct SvInfo{
+        std::string Name;
+        std::string Map;
+        unsigned int NumPlayers;
+
     };
     struct Notification{
         int type ; //1 for lobbysearch event 2 for serversearch
