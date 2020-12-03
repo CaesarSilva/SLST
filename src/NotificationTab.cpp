@@ -211,7 +211,7 @@ void NotificationTab::ShowNotification(std::string Title , std::string Descripti
     #endif
     #ifdef __WXMSW__
     NtMsg->SetMessage(Description);
-    NtMsg->SetTitle(Title)
+    NtMsg->SetTitle(Title);
     NtMsg->Show(30);
     #endif
 }
