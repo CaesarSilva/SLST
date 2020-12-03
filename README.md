@@ -11,10 +11,10 @@ Currently the user needs to edit the INI file manually.
 
 # Dependencies:
   SLST depends on:
-  wxWidgets
-  rapidson (header only library that is already included)
-  INIReader(header only library that is already included)
-  libnotify and it's dependencies(for linux only)
+  - wxWidgets  
+  - rapidson (header only library that is already included)
+  - INIReader(header only library that is already included)
+  - libnotify and it's dependencies(for linux only)
   
   
   
