@@ -1,5 +1,11 @@
 #include "NotificationTab.h"
 
+#ifndef wxHAS_IMAGES_IN_RESOURCES
+    #include "SLST.xpm"
+#endif
+
+
+
 wxBEGIN_EVENT_TABLE(NotificationTab,wxPanel)
 //EVT_COMMAND(wxID_ANY, MY_NEW_TYPE, Lobby::OnProcessA)
 EVT_BUTTON(10105, NotificationTab::rm_TestClick)
@@ -14,17 +20,14 @@ NotificationTab * Ntab = nullptr;
 NotificationTab::NotificationTab(wxWindow *parent, wxWindowID id)
 {
     this->Create(parent,id);
-    this->SetName("Notifications Class");
+    this->SetName("Notifications Classs");
     //ctor
     Ntab = this;
 
     rm_test_textctrl = new wxTextCtrl(this,wxID_ANY, wxEmptyString, wxPoint(30,30),wxSize(200,200),wxTE_MULTILINE);
     rmbt = new wxButton(this, 10105, "click", wxPoint(10,10), wxSize(50,20));
 
-    //wxString sIconPath = wxT("sample.ico");
-
-    //wxIcon* pIcon = new wxIcon("./sample.ico");
-    task->SetIcon(wxIcon("./sample.ico"));
+    task->SetIcon(wxIcon(slst_xpm));
     NtMsg->SetFlags(wxICON_INFORMATION);
     #ifdef __WXMSW__
     NtMsg->UseTaskBarIcon(task);
@@ -83,9 +86,6 @@ for(int i=0 ; i<reader.GetInteger("info", "NumOfEntries", -1); i++){
     //AddNotification(std::string("test"),std::string("test5"),2);
 }
 void NotificationTab::LobbySearch(){
-     //httplib::Client cli("http://api.soldat.pl");
-
-    //auto res = cli.Get("/v0/servers?empty=no");
     wxHTTP get;
     get.SetHeader(_T("Content-type"), _T("text/html; charset=utf-8"));
     get.SetTimeout(10);
@@ -169,7 +169,7 @@ void NotificationTab::LobbySearch(){
                     std::cout << "End of map verification. MapOk:" << MapOk << std::endl;
                 }else if(!enablemapsearch && playersOk) MapOk = true;
                 if(playersOk && MapOk){
-                    AddNotification(ii.Title, ii.Description,1);
+                    AddNotification(ii,1,NumP,Map.ToStdString());
 
                 }else{
                 std::cout << "Notification not added. Playersok" << playersOk << "MapOk" << MapOk << std::endl;
@@ -177,7 +177,7 @@ void NotificationTab::LobbySearch(){
                 }
 
 
-                if(TriggerNotification)AddNotification(ii.Title, ii.Description,1);
+                //if(TriggerNotification)AddNotification(ii,1);
 
             }//Ip == ii.Ip && Port == ii.Port
             }
@@ -187,12 +187,30 @@ void NotificationTab::LobbySearch(){
 
 
 }
-void NotificationTab::AddNotification(std::string Title, std::string Description , int type){
+void NotificationTab::AddNotification(SvIniEntry entry , int type, unsigned int NumP, std::string Map){
     Notification notification ;
-    notification.Description = Description;
-    notification.Title = Title;
+    notification.Description = entry.Description;
+    notification.Title = entry.Title;
+    std::size_t pos = notification.Description.find("$p");
+    if(pos != std::string::npos){
+        notification.Description.replace(pos,2,std::to_string(NumP));
+    }
+    pos = notification.Description.find("$m");
+    if(pos != std::string::npos){
+        notification.Description.replace(pos,2,Map);
+    }
+    pos = notification.Title.find("$p");
+    if(pos != std::string::npos){
+        notification.Title.replace(pos,2,std::to_string(NumP));
+    }
+    pos = notification.Title.find("$m");
+    if(pos != std::string::npos){
+        notification.Title.replace(pos,2,Map);
+    }
+
     notification.type = type;
     Notifications.push_back(notification);
+
 
 }
 void NotificationTab::ShowNotification(std::string Title , std::string Description){
@@ -202,7 +220,7 @@ void NotificationTab::ShowNotification(std::string Title , std::string Descripti
     NotifyNotification *example;
     example = notify_notification_new(Title.c_str() ,Description.c_str(), "ic");
     std::cout << Title.c_str() << " " << Description.c_str() << std::endl;
-    notify_notification_set_timeout(example,15000);
+    notify_notification_set_timeout(example,30000);
     char category[30] = "SLST Notification";
     notify_notification_set_category(example,category);
     notify_notification_set_urgency (example,NOTIFY_URGENCY_NORMAL);
@@ -212,7 +230,7 @@ void NotificationTab::ShowNotification(std::string Title , std::string Descripti
     #ifdef __WXMSW__
     NtMsg->SetMessage(Description);
     NtMsg->SetTitle(Title);
-    NtMsg->Show(30);
+    NtMsg->Show(44);
     #endif
 }
 void NotificationTab::ShowNextNotification(){

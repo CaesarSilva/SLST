@@ -60,9 +60,7 @@ class NotificationTab : public wxPanel
         void onTaskbarEvent(wxCommandEvent &evt);
         void TimerUpdate(wxTimerEvent &evt);
         void LobbySearch();
-        void AddNotification(std::string Title, std::string Description , int type);
-        void ShowNextNotification();
-        void ShowNotification(std::string Title , std::string Description);
+
 
     wxDECLARE_EVENT_TABLE();
     struct SvFilters{
@@ -89,12 +87,15 @@ class NotificationTab : public wxPanel
         int type ; //1 for lobbysearch event 2 for serversearch
         std::string Title;
         std::string Description;
+
     };
     std::vector<SvIniEntry> SvEntries;
     std::vector<Notification> Notifications ;
     protected:
-    protected:
-
+    public:
+        void AddNotification(SvIniEntry entry , int type, unsigned int NumP=0, std::string Map="");
+        void ShowNextNotification();
+        void ShowNotification(std::string Title , std::string Description);
     private:
 };
 
