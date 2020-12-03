@@ -1,0 +1,172 @@
+name: main
+on: [workflow_dispatch]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: [
+          #{ msystem: MINGW64, arch: x86_64 },
+          { msystem: MINGW32, arch: i686   }
+        ]
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          path: temp
+          fetch-depth: 0
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          install: git base-devel mingw-w64-${{ matrix.arch }}-toolchain
+          update: true
+          
+#      - name: Move Checkout
+#        run: |
+#          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
+  
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: C:\wx
+          key:  ${{ runner.os }}-wxmonolith1
+#       
+#      - name: testing cmake msys
+#        shell: msys2 {0}   
+#        run: |
+#          pacman -S mingw-w64-i686-wxmsw3.1 --noconfirm
+#          pacman -S mingw-w64-i686-cmake --noconfirm
+#          ls
+#          cd temp
+#          mkdir build
+#          cd build
+#          cmake .. -G "MSYS Makefiles"
+#          make
+          
+        
+      - name: Download and extract wx widgets
+        if: steps.cache.outputs.cache-hit != 'true'
+
+        run: |
+          cd C:\
+          mkdir wx
+          curl -L -o C:\wx.zip https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.zip
+          Expand-Archive -LiteralPath wx.zip -DestinationPath C:\wx
+          cd C:\wx
+          mkdir mybuild
+          dir
+          cd C:\wx
+          cd lib
+      - name: compiling wxwidgets
+        if: steps.cache.outputs.cache-hit != 'true'
+        shell: msys2 {0}      
+        run: |
+          cd /C/wx/mybuild/
+          ../configure --enable-monolithic --enable-shared --enable-unicode
+          make -j2
+          make install
+          
+      - name: installing wxwidgets
+        if: steps.cache.outputs.cache-hit == 'true'
+        shell: msys2 {0}
+        run: |
+          cd /C/wx/mybuild/
+          make install
+      - name: Cmake and build project on msys2
+        shell: msys2 {0}
+        run: |
+          pacman -S mingw-w64-i686-cmake --noconfirm
+          ls
+          cd temp
+          mkdir build
+          cd build
+          cmake .. -G "MSYS Makefiles"
+          make
+          cd /C/
+          mkdir libs
+      - name: copying lib
+        run: |
+          cd temp
+          dir
+          cd build
+          dir
+          mkdir libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libgcc_s_dw2-1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libstdc++-6.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libexpat-1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/zlib1.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/liblzma-5.dll C:\libs
+          copy D:/a/_temp/msys/msys64/mingw32/bin/libwinpthread-1.dll C:\libs
+          copy C:/wx/mybuild/lib/wxmsw314u_gcc_custom.dll C:\libs
+          copy C:/wx/mybuild/lib/wxmsw314u_gl_gcc_custom.dll C:\libs
+          Xcopy /E /I C:\libs src
+          cd ..
+          xcopy /E /I files build\src
+          
+          
+#here starts conf env originally
+#      - name: conf env
+#        run: |
+#          cd temp
+#          dir
+#          mkdir build
+#          cd build
+#          set WXWIN=C:\wx
+#          cmake .. -G "MinGW Makefiles"
+#        shell: cmd   
+#      - name: build using msys
+#        shell: msys2 {0}
+#        run: |
+#          cd temp
+#          cd build
+#          make
+      - name: 7z download
+        run: |
+          curl -o C:\7.exe https://www.7-zip.org/a/7z1900-x64.exe
+      - name: install 7z
+        run: |
+          C:/7.exe /silent /nocancel /suppressmsgboxes=no
+          
+          cd temp
+          cd build
+          rmdir /s /q CMakeFiles
+          del /q cmake_install.cmake
+          del /q Makefile
+          cd ..
+          7z a -tzip build.zip build
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 0.0.10
+          release_name: Release 0.0.10 (windows)
+          body: SLST Release. Windows only. For linux version, please compile it.
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: temp/build.zip
+          asset_name: SLST.zip
+          asset_content_type: application/zip
+
+
+
+#      - name: "Upload binaries"
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: minimal windows
+#          path: temp\build
