@@ -24,8 +24,28 @@ NotificationTab::NotificationTab(wxWindow *parent, wxWindowID id)
     //wxString sIconPath = wxT("sample.ico");
 
     //wxIcon* pIcon = new wxIcon("./sample.ico");
-    task->SetIcon(wxIcon("sample.ico"));
+    task->SetIcon(wxIcon("./sample.ico"));
     NtMsg->SetFlags(wxICON_INFORMATION);
+    #ifdef __WXMSW__
+    NtMsg->UseTaskBarIcon(task);
+    #endif // __WXMSW__
+    if(task->IsIconInstalled()){
+        std::cout << "Icon Installed" << std::endl ;
+    }else{
+        std::cout << "Icon Not Installed" << std::endl ;
+    }
+    if(task->IsOk()){
+        std::cout << "Is ok true" << std::endl ;
+    }else{
+        std::cout << "Is ok false" << std::endl ;
+    }
+    if(task->IsAvailable()){
+        std::cout << "system tray is available" << std::endl ;
+    }else{
+        std::cout << "system tray is not available" << std::endl ;
+    }
+
+
     //TODO put ini parsing inside a function to allow refreshing
 
 
@@ -189,7 +209,7 @@ void NotificationTab::ShowNotification(std::string Title , std::string Descripti
     GError *error = NULL;
     notify_notification_show(example,&error);
     #endif
-    #ifdef __MSW__
+    #ifdef __WXMSW__
     NtMsg->SetMessage(Description);
     NtMsg->SetTitle(Title)
     NtMsg->Show(30);
