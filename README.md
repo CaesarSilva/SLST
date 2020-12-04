@@ -18,4 +18,12 @@ Currently the user can see the lobby manually, but there's no way to see who's i
   - libnotify and it's dependencies(for linux only)
   
   
+ # Issues:
+ Cmake won't work on linux, i've been using code::blocks to compile it on linux.  
+ On code::blocks, add -lnotify as a linker flag and this on "other compile options", dont forget the backticks
+ 
+`pkg-config --cflags --libs glib-2.0`  
+`pkg-config --cflags --libs gdk-pixbuf-2.0`
+  
+  
   
