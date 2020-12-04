@@ -133,6 +133,7 @@ jobs:
         run: |
           C:/7.exe /silent /nocancel /suppressmsgboxes=no
       - name: delete files 
+        run: |
           cd temp
           cd build
           dir
