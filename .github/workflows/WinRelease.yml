@@ -1,5 +1,5 @@
-name: main
-on: [push]
+name: win-release
+on: [workflow_dispatch]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
