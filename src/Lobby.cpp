@@ -10,8 +10,6 @@ Lobby::Lobby(wxWindow *parent, wxWindowID id):wxPanel()
     this->Create(parent,id);
     this->SetName("Lobby Class");
     //ctor
-
-    //m_waveWindow = new wxScrolledWindow(this,wxID_ANY,wxPoint(10,220),wxSize(900,100));
     bt_refresh = new wxButton(this, 10105, "click", wxPoint(10,10), wxSize(50,20));
     //m_waveWindow->SetVirtualSize(wxSize(1000,100));
     ServerListFrame = new wxScrolledWindow(this,wxID_ANY,wxPoint(10,50),wxSize(400,400));
@@ -144,8 +142,8 @@ void Lobby::OnBtRefresh_Click(wxCommandEvent&evt){
 
     wxCommandEvent eventt(MY_NEW_TYPE);
     eventt.SetString("This is the data");
-    wxFrame* rm_testframe = new wxFrame(this, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700));
-    rm_testframe->Show();
+    //wxFrame* rm_testframe = new wxFrame(this, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700));
+    //rm_testframe->Show();
 // Then post the event
     //wxPostEvent(this, eventt); // to ourselves
 //wxPostEvent(pBar, event);

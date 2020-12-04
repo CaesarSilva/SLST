@@ -268,12 +268,13 @@ rm_test_textctrl->AppendText(testt);*/
 }
 void NotificationTab::TimerUpdate(wxTimerEvent& evt){
     std::cout << "Timerupdate " << evt.GetInterval() << std::endl;
+    if((evtTime % 12) ==0){
+        LobbySearch();
+    }
     if((evtTime % 2) == 0){
         ShowNextNotification();
     }
-    if((evtTime % 8) ==0){
-        LobbySearch();
-    }
+
     evtTime++;
 
 }
