@@ -6,7 +6,7 @@
 #include <wx/notifmsg.h>
 #include <wx/textfile.h>
 #ifdef __WXGTK210__
-    #include <libnotify/notify.h>
+#include <libnotify/notify.h>
 #endif // __WXGTK210__
 //#include <wx/vector.h>
 #include <vector>
@@ -28,62 +28,66 @@ removed linker flags
 */
 class Taskbar : public wxTaskBarIcon
 {
-    public:
-        Taskbar(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE)
-    :   wxTaskBarIcon(iconType){}
-        //virtual ~Taskbar();
-        //void OnTaskbarLClick(wxCommandEvent &evt);
-        void OnTaskbarLClick(wxTaskBarIconEvent &evt);
-        wxDECLARE_EVENT_TABLE();
-    protected:
-    protected:
+public:
+    Taskbar(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE)
+        :   wxTaskBarIcon(iconType) {}
+    //virtual ~Taskbar();
+    //void OnTaskbarLClick(wxCommandEvent &evt);
+    void OnTaskbarLClick(wxTaskBarIconEvent &evt);
+    wxDECLARE_EVENT_TABLE();
+protected:
+protected:
 
-    private:
+private:
 };
 
 class NotificationTab : public wxPanel
 {
-    public:
-        NotificationTab(wxWindow *parent, wxWindowID id);
-        virtual ~NotificationTab();
-        wxNotificationMessage * NtMsg = new wxNotificationMessage(_("My title"), _("3 players are playing coop\n on rzal servers"));
-        wxIconLocation * icl = new wxIconLocation("sample.ico");
-        Taskbar *task = new Taskbar(wxTBI_DOCK);//wxTBI_DOCK
-        wxTextCtrl * rm_test_textctrl = nullptr;
-        wxButton * rmbt = nullptr;
-        wxTextFile tfile ;
-        wxTimer * m_timer;
-        int evtTime ;
+public:
+    NotificationTab(wxWindow *parent, wxWindowID id);
+    virtual ~NotificationTab();
+    wxNotificationMessage * NtMsg = new wxNotificationMessage(_("My title"), _("3 players are playing coop\n on rzal servers"));
+    wxIconLocation * icl = new wxIconLocation("sample.ico");
+    Taskbar *task = new Taskbar(wxTBI_DOCK);//wxTBI_DOCK
+    wxTextCtrl * rm_test_textctrl = nullptr;
+    wxButton * rmbt = nullptr;
+    wxTextFile tfile ;
+    wxTimer * m_timer;
+    int evtTime ;
 //        INIReader reader("./ServersSearch.INI");
-        //INIReader reader ;
-        void rm_TestClick(wxCommandEvent &evt);
-        void onTaskbarEvent(wxCommandEvent &evt);
-        void TimerUpdate(wxTimerEvent &evt);
-        void LobbySearch();
+    //INIReader reader ;
+    void rm_TestClick(wxCommandEvent &evt);
+    void onTaskbarEvent(wxCommandEvent &evt);
+    void TimerUpdate(wxTimerEvent &evt);
+    void LobbySearch();
 
 
     wxDECLARE_EVENT_TABLE();
-    struct SvFilters{
-        int MinPlayers=0;
+    struct SvFilters
+    {
+        unsigned int MinPlayers=0;
         std::string MapList;
 
     };
 
-    struct SvIniEntry{
+    struct SvIniEntry
+    {
         std::string Ip ;
-        int Port;
-        int id;
+        unsigned int Port;
+        unsigned int id;
         SvFilters Filters;
         std::string Title;
         std::string Description;
     };
-    struct SvInfo{
+    struct SvInfo
+    {
         std::string Name;
         std::string Map;
         unsigned int NumPlayers;
 
     };
-    struct Notification{
+    struct Notification
+    {
         int type ; //1 for lobbysearch event 2 for serversearch
         std::string Title;
         std::string Description;
@@ -91,12 +95,12 @@ class NotificationTab : public wxPanel
     };
     std::vector<SvIniEntry> SvEntries;
     std::vector<Notification> Notifications ;
-    protected:
-    public:
-        void AddNotification(SvIniEntry entry , int type, unsigned int NumP=0, std::string Map="");
-        void ShowNextNotification();
-        void ShowNotification(std::string Title , std::string Description);
-    private:
+protected:
+public:
+    void AddNotification(SvIniEntry entry, int type, unsigned int NumP=0, std::string Map="");
+    void ShowNextNotification();
+    void ShowNotification(std::string Title, std::string Description);
+private:
 };
 
 
