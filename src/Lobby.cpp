@@ -108,7 +108,8 @@ void Lobby::OnProcessA(wxCommandEvent & e)
     rm_TestEvent();
 //    wxObject * svln = e.GetEventObject();
     wxString data = e.GetString() ;
-    rm_test_textctrl->AppendText(data);
+    ServerInfo * svinfo = new ServerInfo(this, wxID_ANY, std::string(data.mbc_str()));
+    //rm_test_textctrl->AppendText(std::string(data.mbc_str()));
 
 }
 void Lobby::rm_TestEvent()

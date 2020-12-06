@@ -5,63 +5,15 @@
 #include <wx/textctrl.h>
 #include <wx/vector.h>
 #include <vector>
-
-//below http libraries or other http stuff
-/*#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
-*/
-//#define BOOST_LOG_DYN_LINK 1
-//#include <boost/lexical_cast.hpp>
-//#include <boost/fusion/adapted.hpp>
-//#include <boost/log/trivial.hpp>
-//#include <boost/log/utility/setup.hpp>
-
-//#include "restc-cpp/restc-cpp.h"
-//#include "httplib.h"//TODO remove it if you don't use it
 #include "wx/sstream.h"
 #include <wx/protocol/http.h>
-#include "rapidjson/document.h" // JSON STUFF
-//#include "rapidjson/encodings.h" // maybe that will solve the error
+#include "rapidjson/document.h"
 #include <cstring>
 #include "ServerLine.h"
-#include <memory>//TODO delete if not used
-
-//#include "restc-cpp/SerializeJson.h"
-//#include "restc-cpp/RequestBuilder.h"
+#include "ServerInfo.h"
 //wxDECLARE_EVENT(MY_NEW_TYPE, wxCommandEvent);
 ///Atention! I commented the line above because the event is already declared in ServerLine.h
-//using namespace std;
-//using namespace restc_cpp;
-//using namespace rapidjson;
-/*struct Post {
-    int userId = 0;
-    int id = 0;
-    std::string title;
-    std::string body;
-    };
 
-BOOST_FUSION_ADAPT_STRUCT(
-    Post,
-    (int, userId)
-    (int, id)
-    (std::string, title)
-    (std::string, body)
-)
-struct ServerPost {
-    int MaxPlayers = 0;
-    int NumPlayers = 0;
-    std::string Name;
-    std::string OS;
-    };
-
-BOOST_FUSION_ADAPT_STRUCT(
-    ServerPost,
-    (int, MaxPlayers)
-    (int, NumPlayers)
-    (std::string, Name)
-    (std::string, OS)
-)*/
 class Lobby : public wxPanel
 {
 

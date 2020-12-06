@@ -16,6 +16,7 @@ set(SRC_FILES
     MainNotebook.cpp
     NotificationTab.cpp
     ServerLine.cpp
+    ServerInfo.cpp
 
     )
 add_executable(
