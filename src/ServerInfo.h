@@ -26,6 +26,17 @@ public:
     std::string Sdt_Name,Sdt_Ip,Sdt_Map,Sdt_GStyle,Sdt_Country ;
     unsigned int Std_Port, Std_MaxPlayers,Std_NumPlayers;
     wxDECLARE_EVENT_TABLE();
+    struct player{
+        std::string Name;
+        std::string Kills;
+        std::string Deaths;
+        std::string Team;
+        std::string Ping;
+
+    };
+    std::vector<player> Players;
+
+
 protected:
 
 private:
@@ -33,6 +44,7 @@ private:
     void updateinfo(std::string doc);
     void requestGamestats(std::string Ip, std::string Port);
     wxSocketClient *sclient;
+    void ParseGamestat(std::string wxstr);
 };
 
 #endif // SERVERINFO_H
