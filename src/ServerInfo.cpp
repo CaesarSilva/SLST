@@ -1,15 +1,16 @@
 #include "ServerInfo.h"
 wxBEGIN_EVENT_TABLE(ServerInfo,wxFrame)
     EVT_SOCKET(1313, ServerInfo::OnSocketEvent)
-//    EVT_BUTTON(10105, NotificationTab::rm_TestClick)
+    EVT_BUTTON(10106, ServerInfo::OnClick1)
+    EVT_BUTTON(10107, ServerInfo::OnClick2)
 wxEND_EVENT_TABLE()
 
 ServerInfo::ServerInfo(wxWindow *parent,
                        wxWindowID id,
-                       std::string ipport):wxFrame(nullptr, wxID_ANY, "SLST",wxPoint(30,30),wxSize(900,700))
+                       std::string ipport):wxFrame(nullptr, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700))
 {
-    std::string ip = ipport.substr(0,ipport.find(":"));
-    std::string port = ipport.substr(ipport.find(":")+1,ipport.length());
+    ip = ipport.substr(0,ipport.find(":"));
+    port = ipport.substr(ipport.find(":")+1,ipport.length());
     //rm_test_textctrl = new wxTextCtrl(this,wxID_ANY, wxEmptyString, wxPoint(30,210),wxSize(400,400),wxTE_MULTILINE);
 
     //Title = new wxStaticText(this, wxID_ANY, port, wxPoint(45,5));
@@ -18,6 +19,23 @@ ServerInfo::ServerInfo(wxWindow *parent,
     //RequestServerInformation(ip,port,false);
     requestGamestats(ip,port);
     Show();
+    bt_Click1 = new wxButton(this, 10106, "Run Soldat", wxPoint(20,85), wxSize(60,20));
+    bt_Click2 = new wxButton(this, 10107, "Run Soldat\n alternative", wxPoint(90,85), wxSize(60,20));
+    INIReader reader("./config.ini");
+
+    if (reader.ParseError() != 0)
+    {
+        std::cout << "Can't load 'test.ini'\n";
+
+    }
+    else
+    {
+        s1path = reader.Get("paths", "soldatpath1", "") ;
+        s2path = reader.Get("paths", "soldatpath2", "") ;
+
+    }
+
+
 
     //ctor
 }
@@ -43,6 +61,34 @@ void ServerInfo::RequestServerInformation(std::string Ip, std::string Port, bool
 
 
 }
+void ServerInfo::OnClick1(wxCommandEvent &evt)
+{
+    if(s1path != "")
+    {
+        std::string fullpath = s1path+ " -connect " + ip +" " + port;
+        std::cout << "Run:" << fullpath;
+        wxExecute(fullpath, wxEXEC_ASYNC);
+    }
+    else
+    {
+        std::cout << "s2path empty" << std::endl;
+    }
+
+}
+void ServerInfo::OnClick2(wxCommandEvent &evt)
+{
+    if(s2path != "")
+    {
+        std::string fullpath = s2path+ " -connect " + ip +" " + port;
+        std::cout << "Run:" << fullpath;
+        wxExecute(fullpath, wxEXEC_ASYNC);
+    }
+    else
+    {
+        std::cout << "s1path empty" << std::endl;
+    }
+}
+
 void ServerInfo::OnSocketEvent(wxSocketEvent& event)
 {
     std::cout << "SOCKET EVENT" << std::endl;
@@ -313,42 +359,47 @@ void ServerInfo::ParseGamestat(std::string wxstr)
                   iii.Deaths  << "Team:" <<
                   iii.Team << "ping:" <<
                   iii.Ping << std::endl;
-        wxStaticText * Nm = new wxStaticText(this, wxID_ANY, iii.Name, wxPoint(300,50+b*15));
-        wxStaticText * Kl = new wxStaticText(this, wxID_ANY, iii.Kills, wxPoint(300+120,50+b*15));
-        wxStaticText * Dth = new wxStaticText(this, wxID_ANY, iii.Deaths, wxPoint(300+140,50+b*15));
-        wxStaticText * Png = new wxStaticText(this, wxID_ANY, iii.Ping, wxPoint(300+160,50+b*15));
-        if(iii.Team == "1"){
+        wxStaticText * Nm = new wxStaticText(this, wxID_ANY, iii.Name, wxPoint(20,120+b*15));
+        wxStaticText * Kl = new wxStaticText(this, wxID_ANY, iii.Kills, wxPoint(20+120,120+b*15));
+        wxStaticText * Dth = new wxStaticText(this, wxID_ANY, iii.Deaths, wxPoint(20+140,120+b*15));
+        wxStaticText * Png = new wxStaticText(this, wxID_ANY, iii.Ping, wxPoint(20+160,120+b*15));
+        if(iii.Team == "1")
+        {
             Nm->SetForegroundColour(wxColour(255,0,0));
             Kl->SetForegroundColour(wxColour(255,0,0));
             Dth->SetForegroundColour(wxColour(255,0,0));
             Png->SetForegroundColour(wxColour(255,0,0));
         }
-        if(iii.Team == "2"){
+        if(iii.Team == "2")
+        {
             Nm->SetForegroundColour(wxColour(0,0,255));
             Kl->SetForegroundColour(wxColour(0,0,255));
             Dth->SetForegroundColour(wxColour(0,0,255));
             Png->SetForegroundColour(wxColour(0,0,255));
         }
-        if(iii.Team == "3"){
+        if(iii.Team == "3")
+        {
             Nm->SetForegroundColour(wxColour(255,255,0));
             Kl->SetForegroundColour(wxColour(255,255,0));
             Dth->SetForegroundColour(wxColour(255,255,0));
             Png->SetForegroundColour(wxColour(255,255,0));
         }
-        if(iii.Team == "4"){
+        if(iii.Team == "4")
+        {
             Nm->SetForegroundColour(wxColour(0,255,0));
             Kl->SetForegroundColour(wxColour(0,255,0));
             Dth->SetForegroundColour(wxColour(0,255,0));
             Png->SetForegroundColour(wxColour(0,255,0));
         }
-        if(iii.Team == "5"){
+        if(iii.Team == "5")
+        {
             Nm->SetForegroundColour(wxColour(255,0,255));
             Kl->SetForegroundColour(wxColour(255,0,255));
             Dth->SetForegroundColour(wxColour(255,0,255));
             Png->SetForegroundColour(wxColour(255,0,255));
         }
 
-    b++;
+        b++;
     }
 
 }

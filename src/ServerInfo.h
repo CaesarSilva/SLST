@@ -7,6 +7,8 @@
 
 #include "wx/socket.h"
 
+#include "INIReader.h"
+
 
 //wxFrame* rm_testframe = new wxFrame(this, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700));
 
@@ -16,10 +18,17 @@ public:
     ServerInfo(wxWindow *parent, wxWindowID id, std::string ipport);
     virtual ~ServerInfo();
     void OnSocketEvent(wxSocketEvent& event);
+    void OnClick1(wxCommandEvent &evt);
+    void OnClick2(wxCommandEvent &evt);
+
     wxStaticText * Title = nullptr;
     wxStaticText * stx_GSyl = nullptr;
     wxStaticText * stx_NPlayersMax = nullptr;
     wxStaticText * SERVERINFO = nullptr;
+    wxButton * bt_Click1 = nullptr;
+    wxButton * bt_Click2 = nullptr;
+    std::string s1path, s2path , ip, port ;
+
     //wxTextCtrl * rm_test_textctrl = nullptr;
     unsigned int STEP = 0;
     int data1 ;

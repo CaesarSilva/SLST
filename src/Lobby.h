@@ -26,7 +26,7 @@ class Lobby : public wxPanel
 
     public:
         wxScrolledWindow * ServerListFrame = nullptr;
-        std::vector<ServerLine*> * LinesVector ;
+        std::vector<ServerLine*>  LinesVector ;
 
         wxTextCtrl * rm_test_textctrl = nullptr;
 

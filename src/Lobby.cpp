@@ -38,6 +38,13 @@ void Lobby::RefreshLobby2(std::string  document)
 {
     rapidjson::Document doc ;
     doc.Parse(document.c_str());
+    doc.Parse(document.c_str());
+    for(ServerLine * ii : LinesVector)
+    {
+        ii->Destroy();
+    }
+    LinesVector.clear();
+
 
     if(doc["Servers"].IsArray())
     {
@@ -57,6 +64,7 @@ void Lobby::RefreshLobby2(std::string  document)
             if(doc["Servers"][i]["NumPlayers"].IsInt()) NumP= doc["Servers"][i]["NumPlayers"].GetInt();
             ServerLine *currentline = (new ServerLine(ServerListFrame,wxID_ANY, wxPoint(5, 300+ i*30)));
             currentline->SetValues(i,Name,Ip,Port,NumP,MaxP,Country,GStyle,Map);
+            LinesVector.push_back(currentline);
         }
 
     }
