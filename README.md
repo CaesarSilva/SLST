@@ -1,6 +1,6 @@
 # SLST
 
-  SLST stands for Soldat Lobby Spying Tool
+  SLST stands for Soldat Lobby Spying Tool  
 It's not an actual spying tool, it only reads the information that is already available for everyone else.
 
   What it basically does is to check the information on api.soldat.pl , and analyze it, if there's a server that matches certain criteria, it creates a notification.  
