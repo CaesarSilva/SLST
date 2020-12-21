@@ -14,12 +14,34 @@ Lobby::Lobby(wxWindow *parent, wxWindowID id):wxPanel()
     ServerListFrame = new wxScrolledWindow(this,wxID_ANY,wxPoint(10,50),wxSize(400,400));
     ServerListFrame->SetScrollbars(1,2,10,10);
     ServerListFrame->SetScrollRate(1,1);
-    ServerListFrame->SetVirtualSize(wxSize(500,1000));
+    ServerListFrame->SetVirtualSize(wxSize(500,300));
     ServerListFrame->Show();
     rm_test_textctrl = new wxTextCtrl(ServerListFrame,wxID_ANY, wxEmptyString, wxPoint(30,30),wxSize(200,200),wxTE_MULTILINE);
 
 }
+void Lobby::SortLines(std::string col, bool asc)
+{
+    //TODO CHECK IF THIS FUNCTIONS CAUSES LAG
+    if(col == "NumP")
+    {
 
+
+        sort(LinesVector.begin(), LinesVector.end(), [&]( ServerLine*& lhs,  ServerLine*& rhs)
+        {
+            return ((lhs->Std_NumPlayers > rhs->Std_NumPlayers) && asc) ||
+             ((lhs->Std_NumPlayers < rhs->Std_NumPlayers) && !asc)
+             ;
+        });
+        int i = 0;
+        for(ServerLine * ii : LinesVector)
+        {
+            ii->SetPosition(wxPoint(5 , 300 + i*30));
+            i++;
+        }
+
+    }
+
+}
 void Lobby::nw_RequestJson(std::string url, int Action)
 {
 
@@ -48,7 +70,7 @@ void Lobby::RefreshLobby2(std::string  document)
 
     if(doc["Servers"].IsArray())
     {
-        for(rapidjson::SizeType i=0; i<doc["Servers"].Size(); i++) //TODO SOLVE WARNING
+        for(rapidjson::SizeType i=0; i<doc["Servers"].Size(); i++)
         {
             rm_test_textctrl->AppendText("\nSERVER INFO\n");
             rm_test_textctrl->AppendText(doc["Servers"][i]["Name"].GetString());
@@ -66,6 +88,8 @@ void Lobby::RefreshLobby2(std::string  document)
             currentline->SetValues(i,Name,Ip,Port,NumP,MaxP,Country,GStyle,Map);
             LinesVector.push_back(currentline);
         }
+        ServerListFrame->SetVirtualSize(wxSize(500,330+ 30*LinesVector.size()));
+        SortLines("NumP", true);
 
     }
 }

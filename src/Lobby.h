@@ -31,7 +31,7 @@ class Lobby : public wxPanel
         wxTextCtrl * rm_test_textctrl = nullptr;
 
         wxButton * bt_refresh = nullptr;
-
+        void SortLines(std::string col , bool asc);
         void rm_TestEvent();
         void OnBtRefresh_Click(wxCommandEvent &evt);
         //network stuff below
