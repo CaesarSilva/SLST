@@ -97,18 +97,13 @@ jobs:
           cd build
           dir
           mkdir libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/libgcc_s_dw2-1.dll C:\libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/libstdc++-6.dll C:\libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/libexpat-1.dll C:\libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/zlib1.dll C:\libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/liblzma-5.dll C:\libs
-          copy D:/a/_temp/msys/msys64/mingw32/bin/libwinpthread-1.dll C:\libs
-          copy C:/wx/mybuild/lib/wxmsw314u_gcc_custom.dll C:\libs
-          copy C:/wx/mybuild/lib/wxmsw314u_gl_gcc_custom.dll C:\libs
           Xcopy /E /I C:\libs src
           cd ..
           xcopy /E /I files build\src
-          
+          cd D:\a\_temp\msys\msys64\mingw64\
+          dir
+          cd bin
+          dir
           
 #here starts conf env originally
 #      - name: conf env
