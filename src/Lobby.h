@@ -28,7 +28,7 @@ class Lobby : public wxPanel
         wxScrolledWindow * ServerListFrame = nullptr;
         std::vector<ServerLine*>  LinesVector ;
 
-        wxTextCtrl * rm_test_textctrl = nullptr;
+        //wxTextCtrl * rm_test_textctrl = nullptr;
 
         wxButton * bt_refresh = nullptr;
         void SortLines(std::string col , bool asc);

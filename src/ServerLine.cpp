@@ -9,7 +9,9 @@ wxEND_EVENT_TABLE()
 ServerLine::ServerLine(wxWindow *parent, wxWindowID id, wxPoint pos):wxWindow()
 {
     this->Create(parent,id,pos,wxSize(500,30));
-    this->Show();
+    /// THE POSITION VALUE IS USELESS, SINCE THE POSITION IS CHANGED ON THE PARENT WINDOW AFTER THE OBJECT IS CREATED
+    //std::cout << "Inside Server Line Constructor" << std::endl;
+    //this->Show();
 
 
     bt_p = new wxButton(this, 10111, wxEmptyString, wxPoint(5,10), wxSize(15,15));

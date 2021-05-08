@@ -7,6 +7,7 @@ wxEND_EVENT_TABLE()
 
 Lobby::Lobby(wxWindow *parent, wxWindowID id):wxPanel()
 {
+    std::cout<<"Lobby created"<<std::endl;
     this->Create(parent,id);
     this->SetName("Lobby Class");
     //ctor
@@ -16,7 +17,7 @@ Lobby::Lobby(wxWindow *parent, wxWindowID id):wxPanel()
     ServerListFrame->SetScrollRate(1,1);
     ServerListFrame->SetVirtualSize(wxSize(500,300));
     ServerListFrame->Show();
-    rm_test_textctrl = new wxTextCtrl(ServerListFrame,wxID_ANY, wxEmptyString, wxPoint(30,30),wxSize(200,200),wxTE_MULTILINE);
+    //rm_test_textctrl = new wxTextCtrl(ServerListFrame,wxID_ANY, wxEmptyString, wxPoint(30,30),wxSize(200,200),wxTE_MULTILINE);
 
 }
 void Lobby::SortLines(std::string col, bool asc)
@@ -35,7 +36,7 @@ void Lobby::SortLines(std::string col, bool asc)
         int i = 0;
         for(ServerLine * ii : LinesVector)
         {
-            ii->SetPosition(wxPoint(5 , 300 + i*30));
+            ii->SetPosition(wxPoint(5 , i*30-ServerListFrame->GetScrollPos(wxVERTICAL)));
             i++;
         }
 
@@ -72,8 +73,8 @@ void Lobby::RefreshLobby2(std::string  document)
     {
         for(rapidjson::SizeType i=0; i<doc["Servers"].Size(); i++)
         {
-            rm_test_textctrl->AppendText("\nSERVER INFO\n");
-            rm_test_textctrl->AppendText(doc["Servers"][i]["Name"].GetString());
+            //rm_test_textctrl->AppendText("\nSERVER INFO\n");
+            //rm_test_textctrl->AppendText(doc["Servers"][i]["Name"].GetString());
             unsigned int Port, MaxP, NumP;
 
             std::string Name, Ip, GStyle, Country, Map;
@@ -84,7 +85,7 @@ void Lobby::RefreshLobby2(std::string  document)
             if(doc["Servers"][i]["Port"].IsInt()) Port= doc["Servers"][i]["Port"].GetInt();
             if(doc["Servers"][i]["MaxPlayers"].IsInt()) MaxP= doc["Servers"][i]["MaxPlayers"].GetInt();
             if(doc["Servers"][i]["NumPlayers"].IsInt()) NumP= doc["Servers"][i]["NumPlayers"].GetInt();
-            ServerLine *currentline = (new ServerLine(ServerListFrame,wxID_ANY, wxPoint(5, 300+ i*30)));
+            ServerLine *currentline = (new ServerLine(ServerListFrame,wxID_ANY, wxPoint(50, 300+ i*30)));
             currentline->SetValues(i,Name,Ip,Port,NumP,MaxP,Country,GStyle,Map);
             LinesVector.push_back(currentline);
         }
@@ -95,7 +96,7 @@ void Lobby::RefreshLobby2(std::string  document)
 }
 void Lobby::RefreshLobby()
 {
-    nw_RequestJson("http://api.soldat.pl/v0/servers?empty=no&bots=no", 1);
+    nw_RequestJson("http://api.soldat.pl/v0/servers?empty=no", 1);
 }
 
 void Lobby::OnBtRefresh_Click(wxCommandEvent&evt)
@@ -146,7 +147,7 @@ void Lobby::OnProcessA(wxCommandEvent & e)
 }
 void Lobby::rm_TestEvent()
 {
-    rm_test_textctrl->AppendText("\nx\n");
+    //rm_test_textctrl->AppendText("\nx\n");
 
 
 }
