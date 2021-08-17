@@ -32,14 +32,19 @@ void ServerLine::SetValues(unsigned int id,string Name, string Ip, int Port, int
     string players = std::to_string(Std_NumPlayers)+ "/"+std::to_string(Std_MaxPlayers);
     // wxWindow *f = static_cast<wxWindow*>(GetGrandParent());
     //Sdt_Name = f->GetName();
-    stx_GSyl = new wxStaticText(this, wxID_ANY, Sdt_GStyle, wxPoint(310,5));
+    stx_GSyl = new wxStaticText(this, wxID_ANY, Sdt_GStyle, wxPoint(330,5));
     stx_Name = new wxStaticText(this, wxID_ANY, Sdt_Name, wxPoint(45,5));
 
     stx_Country = new wxStaticText(this, wxID_ANY, Country, wxPoint(20,5));
 
     stx_IpPort = new wxStaticText(this, wxID_ANY, ipport, wxPoint(190,5));
 
-    stx_NPlayersMax = new wxStaticText(this, wxID_ANY, players, wxPoint(340,5));
+    stx_NPlayersMax = new wxStaticText(this, wxID_ANY, players, wxPoint(360,5));
+
+    stx_map = new wxStaticText(this, wxID_ANY, Map, wxPoint(400,5));
+
+
+    //TODO: all the collums, except for ip and port shouldn't be hardcoded, in order to make it compatible with other games
 //    this->GetParent()->GetParent()->rm_TestEvent();
 
 

@@ -20,13 +20,16 @@ public:
     void OnSocketEvent(wxSocketEvent& event);
     void OnClick1(wxCommandEvent &evt);
     void OnClick2(wxCommandEvent &evt);
-
+    void OnClick3(wxCommandEvent &evt);
     wxStaticText * Title = nullptr;
     wxStaticText * stx_GSyl = nullptr;
     wxStaticText * stx_NPlayersMax = nullptr;
     wxStaticText * SERVERINFO = nullptr;
     wxButton * bt_Click1 = nullptr;
     wxButton * bt_Click2 = nullptr;
+    wxButton * bt_Click3 = nullptr;
+    wxWindow * windowsInfo = nullptr; //the purpose of this window is to facilitate the deletion of the statictexts on refresh
+
     std::string s1path, s2path , ip, port ;
 
     //wxTextCtrl * rm_test_textctrl = nullptr;

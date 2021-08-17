@@ -29,7 +29,7 @@ class ServerLine : public wxWindow
     wxStaticText * stx_IpPort = nullptr;
     wxStaticText * stx_GSyl = nullptr;
     wxStaticText * stx_NPlayersMax = nullptr;
-
+    wxStaticText * stx_map = nullptr;
     wxButton * bt_p = nullptr;
 
     void OnBt_Click(wxCommandEvent &evt);

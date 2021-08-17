@@ -2,7 +2,7 @@
 wxBEGIN_EVENT_TABLE(cMain,wxFrame)
     EVT_BUTTON(10123, cMain::OnBt_Click)
 wxEND_EVENT_TABLE()
-cMain::cMain() :wxFrame(nullptr, wxID_ANY, "SLST",wxPoint(30,30),wxSize(500,700))
+cMain::cMain() :wxFrame(nullptr, wxID_ANY, "SLST",wxPoint(30,30),wxSize(650,700))
 {
     //ctor
     m_btn = new wxButton(this, 10123, "Hide", wxPoint(10,10), wxSize(50,20));

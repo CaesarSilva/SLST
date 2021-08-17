@@ -2,7 +2,7 @@
 
 MainNotebook::MainNotebook(wxWindow *parent, wxWindowID id, const wxPoint pos):wxNotebook()
 {
-    this->Create(parent,id,pos,wxSize(500,500));
+    this->Create(parent,id,pos,wxSize(600,500));
     PgLobby = new Lobby(this,wxID_ANY);
     PgNotifications = new NotificationTab(this, wxID_ANY);
     rm_PgEditor = new wxPanel(this,wxID_ANY);

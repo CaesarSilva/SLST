@@ -11,8 +11,8 @@ Lobby::Lobby(wxWindow *parent, wxWindowID id):wxPanel()
     this->Create(parent,id);
     this->SetName("Lobby Class");
     //ctor
-    bt_refresh = new wxButton(this, 10105, "click", wxPoint(10,10), wxSize(50,20));
-    ServerListFrame = new wxScrolledWindow(this,wxID_ANY,wxPoint(10,50),wxSize(400,400));
+    bt_refresh = new wxButton(this, 10105, "refresh", wxPoint(10,10), wxSize(50,20));
+    ServerListFrame = new wxScrolledWindow(this,wxID_ANY,wxPoint(10,50),wxSize(550,400));
     ServerListFrame->SetScrollbars(1,2,10,10);
     ServerListFrame->SetScrollRate(1,1);
     ServerListFrame->SetVirtualSize(wxSize(500,300));
@@ -81,6 +81,7 @@ void Lobby::RefreshLobby2(std::string  document)
             if(doc["Servers"][i]["Name"].IsString()) Name= doc["Servers"][i]["Name"].GetString();
             if(doc["Servers"][i]["GameStyle"].IsString()) GStyle= doc["Servers"][i]["GameStyle"].GetString();
             if(doc["Servers"][i]["IP"].IsString()) Ip= doc["Servers"][i]["IP"].GetString();
+            if(doc["Servers"][i]["CurrentMap"].IsString()) Map= doc["Servers"][i]["CurrentMap"].GetString();
 
             if(doc["Servers"][i]["Port"].IsInt()) Port= doc["Servers"][i]["Port"].GetInt();
             if(doc["Servers"][i]["MaxPlayers"].IsInt()) MaxP= doc["Servers"][i]["MaxPlayers"].GetInt();

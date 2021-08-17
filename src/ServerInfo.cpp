@@ -3,6 +3,7 @@ wxBEGIN_EVENT_TABLE(ServerInfo,wxFrame)
     EVT_SOCKET(1313, ServerInfo::OnSocketEvent)
     EVT_BUTTON(10106, ServerInfo::OnClick1)
     EVT_BUTTON(10107, ServerInfo::OnClick2)
+    EVT_BUTTON(10108, ServerInfo::OnClick3)
 wxEND_EVENT_TABLE()
 
 ServerInfo::ServerInfo(wxWindow *parent,
@@ -13,6 +14,7 @@ ServerInfo::ServerInfo(wxWindow *parent,
     port = ipport.substr(ipport.find(":")+1,ipport.length());
     //rm_test_textctrl = new wxTextCtrl(this,wxID_ANY, wxEmptyString, wxPoint(30,210),wxSize(400,400),wxTE_MULTILINE);
 
+    windowsInfo = new wxWindow(this, wxID_ANY, wxPoint(0,120),wxSize(400,400));
     //Title = new wxStaticText(this, wxID_ANY, port, wxPoint(45,5));
     wxStaticText * rm_Test = new wxStaticText(this, wxID_ANY, ip, wxPoint(77,33));
     wxStaticText * rm_Test1 = new wxStaticText(this, wxID_ANY, port, wxPoint(77,63));
@@ -21,6 +23,7 @@ ServerInfo::ServerInfo(wxWindow *parent,
     Show();
     bt_Click1 = new wxButton(this, 10106, "Run Soldat", wxPoint(20,85), wxSize(60,20));
     bt_Click2 = new wxButton(this, 10107, "Run Soldat\n alternative", wxPoint(90,85), wxSize(60,20));
+    bt_Click3 = new wxButton(this, 10108, "refresh", wxPoint(160,85), wxSize(60,20));
     INIReader reader("./config.ini");
 
     if (reader.ParseError() != 0)
@@ -87,6 +90,13 @@ void ServerInfo::OnClick2(wxCommandEvent &evt)
     {
         std::cout << "s1path empty" << std::endl;
     }
+}
+void ServerInfo::OnClick3(wxCommandEvent &evt)
+{
+    Players.clear();
+    windowsInfo->Destroy();
+    windowsInfo = new wxWindow(this, wxID_ANY, wxPoint(0,120),wxSize(400,400));
+    requestGamestats(ip,port);
 }
 
 void ServerInfo::OnSocketEvent(wxSocketEvent& event)
@@ -359,10 +369,10 @@ void ServerInfo::ParseGamestat(std::string wxstr)
                   iii.Deaths  << "Team:" <<
                   iii.Team << "ping:" <<
                   iii.Ping << std::endl;
-        wxStaticText * Nm = new wxStaticText(this, wxID_ANY, iii.Name, wxPoint(20,120+b*15));
-        wxStaticText * Kl = new wxStaticText(this, wxID_ANY, iii.Kills, wxPoint(20+120,120+b*15));
-        wxStaticText * Dth = new wxStaticText(this, wxID_ANY, iii.Deaths, wxPoint(20+140,120+b*15));
-        wxStaticText * Png = new wxStaticText(this, wxID_ANY, iii.Ping, wxPoint(20+160,120+b*15));
+        wxStaticText * Nm = new wxStaticText(windowsInfo, wxID_ANY, iii.Name, wxPoint(20,5+b*15));
+        wxStaticText * Kl = new wxStaticText(windowsInfo, wxID_ANY, iii.Kills, wxPoint(20+120,5+b*15));
+        wxStaticText * Dth = new wxStaticText(windowsInfo, wxID_ANY, iii.Deaths, wxPoint(20+140,5+b*15));
+        wxStaticText * Png = new wxStaticText(windowsInfo, wxID_ANY, iii.Ping, wxPoint(20+160,5+b*15));
         if(iii.Team == "1")
         {
             Nm->SetForegroundColour(wxColour(255,0,0));
