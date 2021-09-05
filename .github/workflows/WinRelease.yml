@@ -1,6 +1,26 @@
 name: win-release
 on: [workflow_dispatch]
 
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'release name'
+        # Default value if no value is explicitly provided
+        # Input has to be provided for the workflow to run
+        required: true
+      body:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'body'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: true        
+      tagn:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'tag name'
+        # Default value if no value is explicitly provided
+        # Input has to be provided for the workflow to run
+        required: true
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -134,7 +154,7 @@ jobs:
 #          make
       - name: 7z download
         run: |
-          curl -o C:\7.exe https://www.7-zip.org/a/7z1900-x64.exe
+          curl -o C:\7.exe https://www.7-zip.org/a/7z2103-x64.exe
       - name: install 7z
         run: |
           C:/7.exe /silent /nocancel /suppressmsgboxes=no
@@ -150,9 +170,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.11
-          release_name: Release 0.0.11 (windows)
-          body: SLST Release. Windows only. For linux version, please compile it.
+          tag_name: ${{ github.event.inputs.tagn }}
+          release_name: ${{ github.event.inputs.name }}
+          body: ${{ github.event.inputs.body }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
