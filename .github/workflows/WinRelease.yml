@@ -1,6 +1,10 @@
 name: win-release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
   workflow_dispatch:
+    # Inputs the workflow accepts.
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
