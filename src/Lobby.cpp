@@ -97,7 +97,7 @@ void Lobby::RefreshLobby2(std::string  document)
 }
 void Lobby::RefreshLobby()
 {
-    nw_RequestJson("http://api.soldat.pl/v0/servers?empty=no", 1);
+    nw_RequestJson("http://api.soldat.pl/v0/servers", 1);
 }
 
 void Lobby::OnBtRefresh_Click(wxCommandEvent&evt)
@@ -112,7 +112,7 @@ void Lobby::OnBtRefresh_Click(wxCommandEvent&evt)
     while (!get.Connect(_T("api.soldat.pl")))  // only the server, no pages here yet ...
         wxSleep(5);
     wxApp::IsMainLoopRunning();
-    wxInputStream *httpStream = get.GetInputStream(_T("/v0/servers?empty=no"));
+    wxInputStream *httpStream = get.GetInputStream(_T("/v0/servers"));
     //if (get.GetError() == wxPROTO_NOERR)
     //{
     wxString res;
