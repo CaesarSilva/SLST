@@ -105,7 +105,7 @@ jobs:
       - name: Cmake and build project on msys2
         shell: msys2 {0}
         run: |
-          pacman -S mingw-w64-i686-cmake --noconfirm
+          pacman -S mingw-w64-x86_64-cmake --noconfirm
           ls
           cd temp
           mkdir build
