@@ -4,6 +4,7 @@ wxBEGIN_EVENT_TABLE(ServerInfo,wxFrame)
     EVT_BUTTON(10106, ServerInfo::OnClick1)
     EVT_BUTTON(10107, ServerInfo::OnClick2)
     EVT_BUTTON(10108, ServerInfo::OnClick3)
+    EVT_BUTTON(10109, ServerInfo::OnClick4)
 wxEND_EVENT_TABLE()
 
 ServerInfo::ServerInfo(wxWindow *parent,
@@ -24,6 +25,7 @@ ServerInfo::ServerInfo(wxWindow *parent,
     bt_Click1 = new wxButton(this, 10106, "Run Soldat", wxPoint(20,85), wxSize(60,20));
     bt_Click2 = new wxButton(this, 10107, "Run Soldat\n alternative", wxPoint(90,85), wxSize(60,20));
     bt_Click3 = new wxButton(this, 10108, "refresh", wxPoint(160,85), wxSize(60,20));
+    bt_Click4 = new wxButton(this, 10109, "Delete Map", wxPoint(260,85), wxSize(80,20));
     INIReader reader("./config.ini");
 
     if (reader.ParseError() != 0)
@@ -35,6 +37,7 @@ ServerInfo::ServerInfo(wxWindow *parent,
     {
         s1path = reader.Get("paths", "soldatpath1", "") ;
         s2path = reader.Get("paths", "soldatpath2", "") ;
+        mapspath = reader.Get("paths", "mapspath", "") ;
 
     }
 
@@ -97,6 +100,19 @@ void ServerInfo::OnClick3(wxCommandEvent &evt)
     windowsInfo->Destroy();
     windowsInfo = new wxWindow(this, wxID_ANY, wxPoint(0,120),wxSize(400,400));
     requestGamestats(ip,port);
+}
+void ServerInfo::OnClick4(wxCommandEvent &evt)
+{
+    if(mapspath != "")
+    {
+        std::string fullpath = "rm "+mapspath+ currentmap +".pms";
+        std::cout << "Run:" << fullpath << std::endl;
+        wxExecute(fullpath, wxEXEC_ASYNC);
+    }
+    else
+    {
+        std::cout << "mapspath empty" << mapspath << std::endl;
+    }
 }
 
 void ServerInfo::OnSocketEvent(wxSocketEvent& event)
@@ -282,9 +298,10 @@ void ServerInfo::ParseGamestat(std::string wxstr)
         {
             std::cout << "b==1" << std::endl;
             std::cout << "Map:" <<
-                      ii.substr(3,ii.length())
+                      ii.substr(5,ii.length())
                       << std::endl;
-
+            wxStaticText * Mptxt = new wxStaticText(windowsInfo, wxID_ANY, "Map:"+ ii.substr(5,ii.length()), wxPoint(20,5));
+            currentmap = ii.substr(5,ii.length());
         }
         if(b==3)
         {
@@ -357,6 +374,7 @@ void ServerInfo::ParseGamestat(std::string wxstr)
 
 
         b++;
+        std::cout << "end of the for. b=" << b << std::endl;
     }
 
     std::cout<<"3rd for, parsing players vector" << std::endl;
@@ -369,10 +387,10 @@ void ServerInfo::ParseGamestat(std::string wxstr)
                   iii.Deaths  << "Team:" <<
                   iii.Team << "ping:" <<
                   iii.Ping << std::endl;
-        wxStaticText * Nm = new wxStaticText(windowsInfo, wxID_ANY, iii.Name, wxPoint(20,5+b*15));
-        wxStaticText * Kl = new wxStaticText(windowsInfo, wxID_ANY, iii.Kills, wxPoint(20+120,5+b*15));
-        wxStaticText * Dth = new wxStaticText(windowsInfo, wxID_ANY, iii.Deaths, wxPoint(20+140,5+b*15));
-        wxStaticText * Png = new wxStaticText(windowsInfo, wxID_ANY, iii.Ping, wxPoint(20+160,5+b*15));
+        wxStaticText * Nm = new wxStaticText(windowsInfo, wxID_ANY, iii.Name, wxPoint(20,25+b*15));
+        wxStaticText * Kl = new wxStaticText(windowsInfo, wxID_ANY, iii.Kills, wxPoint(20+120,25+b*15));
+        wxStaticText * Dth = new wxStaticText(windowsInfo, wxID_ANY, iii.Deaths, wxPoint(20+140,25+b*15));
+        wxStaticText * Png = new wxStaticText(windowsInfo, wxID_ANY, iii.Ping, wxPoint(20+160,25+b*15));
         if(iii.Team == "1")
         {
             Nm->SetForegroundColour(wxColour(255,0,0));

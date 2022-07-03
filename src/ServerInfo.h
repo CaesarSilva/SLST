@@ -21,6 +21,7 @@ public:
     void OnClick1(wxCommandEvent &evt);
     void OnClick2(wxCommandEvent &evt);
     void OnClick3(wxCommandEvent &evt);
+    void OnClick4(wxCommandEvent &evt);
     wxStaticText * Title = nullptr;
     wxStaticText * stx_GSyl = nullptr;
     wxStaticText * stx_NPlayersMax = nullptr;
@@ -28,9 +29,10 @@ public:
     wxButton * bt_Click1 = nullptr;
     wxButton * bt_Click2 = nullptr;
     wxButton * bt_Click3 = nullptr;
+    wxButton * bt_Click4 = nullptr;//delete map
     wxWindow * windowsInfo = nullptr; //the purpose of this window is to facilitate the deletion of the statictexts on refresh
 
-    std::string s1path, s2path , ip, port ;
+    std::string s1path, s2path , currentmap , mapspath, ip, port ;
 
     //wxTextCtrl * rm_test_textctrl = nullptr;
     unsigned int STEP = 0;
