@@ -26,4 +26,4 @@ SLST possibly works on MacOS, but I won't test that, if someone has an issue wit
   
 
   
-  
+ On Fedora, I failed to compile using the wxwidgets library from the repository, I had to compile it from scratch, so on linux I recommend downloading the latest stable wxWidgets release. There's also an include <vector> missing in one of the files, the compiler might throw an error or not, it's an easy fix, i'll make sure to fix that later.
